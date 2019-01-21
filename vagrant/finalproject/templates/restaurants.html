@@ -1,0 +1,14 @@
+<html>
+<body>
+<h1>All Restaurants</h1>
+
+{% for r in restaurants %}
+	<div>
+		<p>{{r.name}}</p>
+		<p><a href="#">Edit Restaurant</a></p>
+		<p><a href="#">Delete Restaurant</a></p>
+	</div>
+{% endfor %}
+
+</body>
+</html>
