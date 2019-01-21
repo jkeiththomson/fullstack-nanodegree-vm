@@ -2,14 +2,18 @@
 <h1>Menu for {{restaurant.name}}</h1>
 <a href = '#'>Create New Menu Item for this Restaurant</a>
 
-{% for i in items %}
-	<p>{{i.name}}</p>
-	<p>{{i.price}} </p>
-	<p>{{i.description}}</p>
-	<a href='#'>Edit</a>
-	<a href='#'>Delete</a>
-	<br><br>
-{% endfor %}
+{% if items|length %}
+	{% for i in items %}
+		<p>{{i.name}}</p>
+		<p>{{i.price}} </p>
+		<p>{{i.description}}</p>
+		<a href='#'>Edit</a>
+		<a href='#'>Delete</a>
+		<br><br>
+	{% endfor %}
+{% else %}
+	<p>No items in menu!</p>
+{% endif %}
 
 </body>
 </html>
