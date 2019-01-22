@@ -3,16 +3,16 @@
 
 <h1> Edit Menu Item </h1>
 
-<form action="#" method = 'post'>
+<form action="{{ url_for('editMenuItem',restaurant_id=restaurant_id, menu_id=item.id)}}" method = 'post'>
 
 	<p>Name:</p>
-	<input type ='text' size='30' name='name' placeholder='{{item.name }}'>
+	<input type ='text' size='30' name='name' value='{{item.name }}'>
 
 	<p>Description:</p>
-	<textarea name='description' rows='5' cols='40' placeholder='{{item.description }}'></textarea>
+	<textarea name='description' rows='5' cols='40' value='{{item.description}}'></textarea>
 
 	<p>Price:</p>
-	<input type = 'text' size = '8' name='price' placeholder='{{item.price}}'>
+	<input type = 'text' size = '8' name='price' value='{{item.price}}'>
 
 	<p>Course:</p>
 	{% if item.course == 'Appetizer' %}
@@ -40,8 +40,9 @@
 	{% endif %}
 
 	<input type='submit' value='Edit'>
-	<a href = '#'> Cancel </a>
 </form>
+
+<a href = '{{url_for('showMenu', restaurant_id = restaurant_id)}}'> Cancel </a>
 
 </body>
 </html>
