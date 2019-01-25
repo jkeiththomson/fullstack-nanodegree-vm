@@ -1,0 +1,31 @@
+<html>
+<body>
+
+<h1> Edit Instrument </h1>
+
+<form action="{{ url_for('editInstrument', category_id=item.category_id, instrument_id=item.id)}}" method='post'>
+
+	<p>Name:</p>
+	<input type ='text' size='30' name='name' value='{{item.name }}'>
+
+	<p>Description:</p>
+	<textarea name='description' rows='5' cols='40' '>{{item.description}}</textarea>
+
+	<p>Category:</p>
+	{% if categories %}
+		{% for c in categories %}
+			{% if item.category_id == c.id %}
+				<input type='radio' name='category' value='{{c.name}}' checked >{{c.name}}
+			{%else%}
+				<input type='radio' name='category' value='{{c.name}}'>{{c.name}}
+		    {% endif %}
+		{% endfor %}
+	{% endif %}
+
+	<input type='submit' value='Edit'>
+</form>
+
+<a href = '{{url_for('showCategory', category_id=item.category_id)}}'> Cancel </a>
+
+</body>
+</html>

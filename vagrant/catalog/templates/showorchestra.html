@@ -1,0 +1,17 @@
+<html>
+<body>
+<h1>The Orchestra</h1>
+<h2>Categories</h2>
+
+{% if categories %}
+	{% for c in categories %}
+		<div>
+			<p><a href="{{url_for( 'showCategory', category_id=c.id)}}">{{c.name}}</a></p>
+		</div>
+	{% endfor %}
+{% else %}
+	<p>No restaurants in list!</p>
+{% endif %}
+
+</body>
+</html>
