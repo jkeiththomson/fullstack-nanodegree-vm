@@ -235,6 +235,30 @@ def getCategoryId(catName):
             return c.id
     return None
 
+# API - Return all categories
+@app.route('/categories/JSON')
+def categoriesJSON():
+    categories = session.query(Category).all()
+    return jsonify(Categories=[c.serialize for c in categories])
+
+# API - return a single category
+@app.route('/category/<int:category_id>/JSON')
+def categoryJSON(category_id):
+    category = session.query(Category).filter_by(id=category_id).one()
+    return jsonify(Category=category.serialize)
+
+# API - Return all instruments
+@app.route('/instruments/JSON')
+def instrumentsJSON():
+    instruments = session.query(Instrument).all()
+    return jsonify(Instruments=[i.serialize for i in instruments])
+
+# API - return a single instrument
+@app.route('/instrument/<int:instrument_id>/JSON')
+def instrumentJSON(instrument_id):
+    instrument = session.query(Instrument).filter_by(id=instrument_id).one()
+    return jsonify(Instrument=instrument.serialize)
+
 
 if __name__ == '__main__':
     app.secret_key = 'a_really_really_secret_key'
