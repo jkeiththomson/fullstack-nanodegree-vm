@@ -207,6 +207,8 @@ def showInstrument(category_id, instrument_id):
 # NEW INSTRUMENT SCREEN
 @app.route('/category/<int:category_id>/instrument/new')
 def newInstrument(category_id):
+    if 'username' not in login_session:
+        return redirect(url_for('showLogin'))
     if request.method == 'POST':
         newItem = Instrument(
             name=request.form['name'],
@@ -222,6 +224,8 @@ def newInstrument(category_id):
 @app.route('/category/<int:category_id>/instrument/<int:instrument_id>/edit',
            methods=['GET', 'POST'])
 def editInstrument(category_id, instrument_id):
+    if 'username' not in login_session:
+        return redirect(url_for('showLogin'))
     categories = session.query(Category).all()
     editedInstrument = session.query(Instrument).filter_by(id=instrument_id).one()
     if request.method == 'POST':
@@ -247,6 +251,8 @@ def editInstrument(category_id, instrument_id):
 @app.route('/category/<int:category_id>/instrument/<int:instrument_id>/delete',
            methods=['GET', 'POST'])
 def deleteInstrument(category_id, instrument_id):
+    if 'username' not in login_session:
+        return redirect(url_for('showLogin'))
     itemToDelete = session.query(Instrument).filter_by(id=instrument_id).one()
     if request.method == 'POST':
         session.delete(itemToDelete)
