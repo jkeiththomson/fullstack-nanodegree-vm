@@ -173,20 +173,22 @@ def showInstrument(category_id, instrument_id):
         'showinstrument.html', instrument=instrument, category=category)
 
 # NEW INSTRUMENT SCREEN
-@app.route('/category/<int:category_id>/instrument/new')
+@app.route('/category/<int:category_id>/instrument/new', methods=['GET', 'POST'])
 def newInstrument(category_id):
     if 'username' not in login_session:
         return redirect(url_for('showLogin'))
+    categories = session.query(Category).all()
     if request.method == 'POST':
+        cat_id = getCategoryId(request.form['category'])
         newItem = Instrument(
             name=request.form['name'],
             description=request.form['description'],
-            category=getCategoryId(request.form['category']))
+            category_id=cat_id)
         session.add(newItem)
         session.commit()
-        return redirect(url_for('showCategory', category_id=newItem.category_id))
+        return redirect(url_for('showCategory', category_id=cat_id))
     else:
-        return render_template('newinstrument.html', category_id=category_id)
+        return render_template('newinstrument.html', category_id=category_id, categories=categories)
 
 # EDIT INSTRUMENT SCREEN
 @app.route('/category/<int:category_id>/instrument/<int:instrument_id>/edit',
@@ -202,11 +204,7 @@ def editInstrument(category_id, instrument_id):
         if request.form['description']:
             editedInstrument.description = request.form['description']
         if request.form['category']:
-            catName = request.form['category']
-            for c in categories:
-                if c.name == catName:
-                    editedInstrument.category_id = c.id
-
+            editedInstrument.category_id = getCategoryId(request.form['category'])
         session.add(editedInstrument)
         session.commit()
         return redirect(url_for('showInstrument', category_id=editedInstrument.category_id,
@@ -228,6 +226,14 @@ def deleteInstrument(category_id, instrument_id):
         return redirect(url_for('showCategory', category_id=category_id))
     else:
         return render_template('deleteInstrument.html', item=itemToDelete)
+
+# HELPER FUNCTION - given a category name, return its ID
+def getCategoryId(catName):
+    categories = session.query(Category).all()
+    for c in categories:
+        if c.name == catName:
+            return c.id
+    return None
 
 
 if __name__ == '__main__':

@@ -6,15 +6,15 @@
 <form action="{{ url_for('newInstrument', category_id=category_id)}}" method='post'>
 
 	<p>Name:</p>
-	<input type ='text' size='30' name='name' value='{{item.name }}'>
+	<input type ='text' size='30' name='name'>
 
 	<p>Description:</p>
-	<textarea name='description' rows='5' cols='40' '>{{item.description}}</textarea>
+	<textarea name='description' rows='5' cols='40'></textarea>
 
 	<p>Category:</p>
 	{% if categories %}
 		{% for c in categories %}
-			{% if item.category_id == c.id %}
+			{% if category_id == c.id %}
 				<input type='radio' name='category' value='{{c.name}}' checked >{{c.name}}
 			{%else%}
 				<input type='radio' name='category' value='{{c.name}}'>{{c.name}}
