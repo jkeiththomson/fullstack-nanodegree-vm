@@ -1,7 +1,12 @@
 {% extends "layout.html" %}
 {% block main %}
 
-<h1> Add New Instrument </h1>
+<nav>
+    <h2>Add New Instrument</h2>
+    <p>
+        <a href="{{url_for( 'showCategory', category_id=category.id)}}">Return to Orchestra</a>
+    </p>
+</nav>
 
 <form action="{{ url_for('newInstrument', category_id=category_id)}}" method='post'>
 
@@ -21,6 +26,12 @@
 		    {% endif %}
 		{% endfor %}
 	{% endif %}
+
+	<p>Picture URL:</p>
+	<input type ='text' size='200' name='picture_url'>
+
+	<p>Picture Attribution:</p>
+	<input type ='text' size='200' name='picture_attr'>
 
 	<input type='submit' value='Add Instrument'>
 </form>

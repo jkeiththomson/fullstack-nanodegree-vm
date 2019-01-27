@@ -9,7 +9,7 @@
 	<input type ='text' size='30' name='name' value='{{item.name }}'>
 
 	<p>Description:</p>
-	<textarea name='description' rows='5' cols='40' '>{{item.description}}</textarea>
+	<textarea name='description' rows='5' cols='40'>{{item.description}}</textarea>
 
 	<p>Category:</p>
 	{% if categories %}
@@ -21,6 +21,12 @@
 		    {% endif %}
 		{% endfor %}
 	{% endif %}
+
+	<p>Picture URL:</p>
+	<input type ='text' size='200' name='picture_url' value='{{item.picture_url }}'>
+
+	<p>Picture Attribution:</p>
+	<input type ='text' size='200' name='name' value='{{item.picture_attr }}'>
 
 	<input type='submit' value='Edit'>
 </form>

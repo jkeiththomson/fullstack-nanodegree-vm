@@ -1,15 +1,29 @@
 {% extends "layout.html" %}
 {% block main %}
-<h2>Categories</h2>
 
-{% if categories %}
-	{% for c in categories %}
-		<div>
-			<p><a href="{{url_for( 'showCategory', category_id=c.id)}}">{{c.name}}</a></p>
-		</div>
-	{% endfor %}
-{% else %}
-	<p>No restaurants in list!</p>
-{% endif %}
+<nav>
+	<h2>Sections of the Orchestra</h2>
+	<ul>
+		{% if categories %}
+			{% for c in categories %}
+				<li>
+					<a href="{{url_for( 'showCategory', category_id=c.id)}}">{{c.name}}</a>
+				</li>
+			{% endfor %}
+		{% else %}
+			<li>No categories in list!</li>
+		{% endif %}
+	</ul>
+	<p>Select a section!</p>
+</nav>
+
+<article>
+	<img src="https://c2.staticflickr.com/4/3442/5834658432_02a499b10d_b.jpg" alt="orchestra">
+
+	<h3>About This Website</h3>
+	<p>This little website lets you learn about the various musical instrumeents that make up a modern symphony orchestra.</p>
+	<p>All of the information about each instrument is stored in a database on the server. If you log into this website with your Google Plus credentials, you can add, modify and delete the instruments in the database.</p>
+	<p>Choose a section from the list on the left to see the instruments in that section of the orchestra.</p>
+</article>
 
 {% endblock %}

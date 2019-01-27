@@ -155,22 +155,6 @@ instrument24 = Instrument(name='Double Bass',
 session.add(instrument24)
 session.commit()
 
-instrument25 = Instrument(name='Piano',
-	description='The piano is an acoustic, stringed musical instrument invented in Italy by Bartolomeo Cristofori around the year 1700 (the exact year is uncertain), in which the strings are struck by hammers. It is played using a keyboard, which is a row of keys (small levers) that the performer presses down or strikes with the fingers and thumbs of both hands to cause the hammers to strike the strings. The word piano is a shortened form of pianoforte, the Italian term for the early 1700s versions of the instrument, which in turn derives from gravicembalo col piano e forte and fortepiano. The Italian musical terms piano and forte indicate "soft" and "loud" respectively, in this context referring to the variations in volume (i.e., loudness) produced in response to a touch or pressure on the keys: the greater the velocity of a key press, the greater the force of the hammer hitting the strings, and the louder the sound of the note produced. [wikipedia.org]',
-	category_id=category3.id,
-	picture_url='https://upload.wikimedia.org/wikipedia/commons/c/c8/Grand_piano_and_upright_piano.jpg',
-	picture_attr='User:Gryffindor and User:Megodenas [CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0)], via Wikimedia Commons')
-session.add(instrument25)
-session.commit()
-
-instrument26 = Instrument(name='Celeste',
-	description='The celesta or celeste is a struck idiophone operated by a keyboard. It looks similar to an upright piano (four- or five-octave), albeit with smaller keys and a much smaller cabinet, or a large wooden music box (three-octave). The keys connect to hammers that strike a graduated set of metal (usually steel) plates or bars suspended over wooden resonators. Four- or five-octave models usually have a damper pedal that sustains or damps the sound. The three-octave instruments do not have a pedal because of their small "table-top" design. One of the best-known works that uses the celesta is "Dance of the Sugar Plum Fairy" from The Nutcracker. [wikipedia.org]',
-	category_id=category3.id,
-	picture_url='https://upload.wikimedia.org/wikipedia/commons/4/46/Celesta_Schiedmayer_Studio.jpg',
-	picture_attr='Schiedmayer Celesta GmbH [CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0)], via Wikimedia Commons')
-session.add(instrument26)
-session.commit()
-
 instrument27 = Instrument(name='Harp',
 	description='The harp is a stringed musical instrument that has a number of individual strings running at an angle to its soundboard; the strings are plucked with the fingers. Harps have been known since antiquity in Asia, Africa and Europe, dating back at least as early as 3500 BC. The instrument had great popularity in Europe during the Middle Ages and Renaissance, where it evolved into a wide range of variants with new technologies, and was disseminated to the colonies, finding particular popularity in Latin America. Although some ancient members of the harp family died out in the Near East and South Asia, descendants of early harps are still played in Myanmar and parts of Africa, and other defunct variants in Europe and Asia have been utilized by musicians in the modern era. [wikipedia.org]',
 	category_id=category3.id,
@@ -182,7 +166,7 @@ session.commit()
 ####################### Precussion Category ############################
 
 category4 = Category(name='Percussion',
-	description='A percussion instrument is a musical instrument that is sounded by being struck or scraped by a beater (including attached or enclosed beaters or rattles); struck, scraped or rubbed by hand; or struck against another similar instrument. The percussion family is believed to include the oldest musical instruments, following the human voice. The percussion section of an orchestra most commonly contains instruments such as timpani, snare drum, bass drum, cymbals, triangle and tambourine. However, the section can also contain non-percussive instruments, such as whistles and sirens, or a blown conch shell. Percussive techniques can also be applied to the human body, as in body percussion. On the other hand, keyboard instruments, such as the celesta, are not normally part of the percussion section, but keyboard percussion instruments such as the glockenspiel and xylophone (which do not have piano keyboards) are included. Percussion instruments are most commonly divided into two classes: Pitched percussion instruments, which produce notes with an identifiable pitch, and unpitched percussion instruments, which produce notes or sounds without an identifiable pitch.')
+	description='A percussion instrument is a musical instrument that is sounded by being struck or scraped by a beater (including attached or enclosed beaters or rattles); struck, scraped or rubbed by hand; or struck against another similar instrument. The percussion family is believed to include the oldest musical instruments, following the human voice. The percussion section of an orchestra most commonly contains instruments such as timpani, snare drum, bass drum, cymbals, triangle and tambourine. However, the section can also contain non-percussive instruments, such as whistles and sirens, or a blown conch shell. Percussion instruments are most commonly divided into two classes: Pitched percussion instruments, which produce notes with an identifiable pitch, and unpitched percussion instruments, which produce notes or sounds without an identifiable pitch.')
 session.add(category4)
 session.commit()
 
@@ -234,5 +218,20 @@ instrument36 = Instrument(name='Gong',
 session.add(instrument36)
 session.commit()
 
+instrument37 = Instrument(name='Piano',
+	description='The piano is an acoustic, stringed musical instrument invented in Italy by Bartolomeo Cristofori around the year 1700 (the exact year is uncertain), in which the strings are struck by hammers. It is played using a keyboard, which is a row of keys (small levers) that the performer presses down or strikes with the fingers and thumbs of both hands to cause the hammers to strike the strings. The word piano is a shortened form of pianoforte, the Italian term for the early 1700s versions of the instrument, which in turn derives from gravicembalo col piano e forte and fortepiano. The Italian musical terms piano and forte indicate "soft" and "loud" respectively, in this context referring to the variations in volume (i.e., loudness) produced in response to a touch or pressure on the keys: the greater the velocity of a key press, the greater the force of the hammer hitting the strings, and the louder the sound of the note produced. [wikipedia.org]',
+	category_id=category4.id,
+	picture_url='https://upload.wikimedia.org/wikipedia/commons/c/c8/Grand_piano_and_upright_piano.jpg',
+	picture_attr='User:Gryffindor and User:Megodenas [CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0)], via Wikimedia Commons')
+session.add(instrument37)
+session.commit()
+
+instrument38 = Instrument(name='Celeste',
+	description='The celesta or celeste is a struck idiophone operated by a keyboard. It looks similar to an upright piano (four- or five-octave), albeit with smaller keys and a much smaller cabinet, or a large wooden music box (three-octave). The keys connect to hammers that strike a graduated set of metal (usually steel) plates or bars suspended over wooden resonators. Four- or five-octave models usually have a damper pedal that sustains or damps the sound. The three-octave instruments do not have a pedal because of their small "table-top" design. One of the best-known works that uses the celesta is "Dance of the Sugar Plum Fairy" from The Nutcracker. [wikipedia.org]',
+	category_id=category4.id,
+	picture_url='https://upload.wikimedia.org/wikipedia/commons/4/46/Celesta_Schiedmayer_Studio.jpg',
+	picture_attr='Schiedmayer Celesta GmbH [CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0)], via Wikimedia Commons')
+session.add(instrument38)
+session.commit()
 
 print "added categories and instruments!"

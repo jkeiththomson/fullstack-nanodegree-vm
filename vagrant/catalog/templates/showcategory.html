@@ -1,35 +1,48 @@
 {% extends "layout.html" %}
 {% block main %}
 
-<h2>Categories</h2>
+<nav>
+	<h2>Sections of the Orchestra</h2>
+	<ul>
+		{% if categories %}
+			{% for c in categories %}
+				<li>
+					{% if c.id == category.id %}
+						<a class="selected" href="{{url_for( 'showCategory', category_id=c.id)}}">{{c.name}}</a>
+					{% else %}
+						<a href="{{url_for( 'showCategory', category_id=c.id)}}">{{c.name}}</a>
+					{% endif %}
+				</li>
+			{% endfor %}
+		{% else %}
+			<li>No categories in list!</li>
+		{% endif %}
+	</ul>
+    <p>
+        <a href="{{url_for('showOrchestra')}}"> < Home</a>
+    </p>
 
-{% if categories %}
-	{% for c in categories %}
-		<div>
-			<p><a href="{{url_for( 'showCategory', category_id=c.id)}}">{{c.name}}</a></p>
-		</div>
-	{% endfor %}
-{% else %}
-	<p>No categories in list!</p>
-{% endif %}
+</nav>
 
-<div>
-	<h3>{{category.name}}</h3>
-	<p>{{category.description}}</p>
-</div>
+<article>
+	<div>
+		<h3>The {{category.name}} Section</h3>
+		<p>{{category.description}}</p>
+	</div>
 
-<h4>Instruments</h4>
-{% if instruments %}
-	{% for i in instruments %}
-		<div>
-			<p><a href="{{url_for( 'showInstrument', category_id=i.category_id, instrument_id=i.id)}}">{{i.name}}</a></p>
-		</div>
-	{% endfor %}
-{% else %}
-	<p>No instruments in list!</p>
-{% endif %}
-<div>
+	<h3>Instruments in the {{category.name}} Section</h3>
+	<ul>
+		{% if instruments %}
+			{% for i in instruments %}
+				<li>
+					<a href="{{url_for( 'showInstrument', category_id=i.category_id, instrument_id=i.id)}}">{{i.name}}</a>
+				</li>
+			{% endfor %}
+		{% else %}
+			<li>No instruments in list!</li>
+		{% endif %}
+	</ul>
 	<a href="{{url_for('newInstrument', category_id=category_id)}}"> Add a new instrument </a>
-</div>
+</article>
 
 {% endblock %}

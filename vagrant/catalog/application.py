@@ -192,6 +192,8 @@ def newInstrument(category_id):
         newItem = Instrument(
             name=request.form['name'],
             description=request.form['description'],
+            picture_url=request.form['picture_url'],
+            picture_attr=request.form['picture_attr'],
             category_id=cat_id)
         session.add(newItem)
         session.commit()
@@ -215,6 +217,10 @@ def editInstrument(category_id, instrument_id):
             editedInstrument.name = request.form['name']
         if request.form['description']:
             editedInstrument.description = request.form['description']
+        if request.form['picture_url']:
+            editedInstrument.picture_url = request.form['picture_url']
+        if request.form['picture_attr']:
+            editedInstrument.picture_attr = request.form['picture_attr']
         if request.form['category']:
             editedInstrument.category_id = getCategoryId(request.form['category'])
         session.add(editedInstrument)
