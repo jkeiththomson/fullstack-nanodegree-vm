@@ -1,6 +1,6 @@
-<html>
-<body>
-<h1>The Orchestra</h1>
+{% extends "layout.html" %}
+{% block main %}
+
 <h2>Categories</h2>
 
 {% if categories %}
@@ -32,7 +32,4 @@
 	<a href="{{url_for('newInstrument', category_id=category_id)}}"> Add a new instrument </a>
 </div>
 
-
-
-</body>
-</html>
+{% endblock %}

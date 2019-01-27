@@ -25,7 +25,6 @@ session = DBSession()
 
 
 ############## AUTHENITCATION ##################
-
 # LOGIN SCREEN - Create anti-forgery state token
 @app.route('/login')
 def showLogin():
@@ -137,6 +136,11 @@ def gdisconnect():
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
     if result['status'] == '200':
+        del login_session['access_token']
+        del login_session['gplus_id']
+        del login_session['username']
+        del login_session['email']
+        del login_session['picture']
         response = make_response(json.dumps('Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
         return response
@@ -152,7 +156,7 @@ def gdisconnect():
 def showOrchestra():
     categories = session.query(Category).all()
     return render_template(
-        'showorchestra.html', categories=categories)
+        'showorchestra.html', logged_in=('username' in login_session), categories=categories)
 
 # CATEGORY SCREEN - Orchestra page with a category selected
 @app.route('/category/<int:category_id>/')
@@ -161,8 +165,8 @@ def showCategory(category_id):
     category = session.query(Category).filter_by(id=category_id).one()
     instruments = session.query(Instrument).filter_by(category_id=category_id)
     return render_template(
-        'showcategory.html', categories=categories, category=category, instruments=instruments,
-        category_id=category_id)
+        'showcategory.html', logged_in=('username' in login_session), categories=categories,
+        category=category, instruments=instruments, category_id=category_id)
 
 # INSTRUMENT DETAILS SCREEN
 @app.route('/category/<int:category_id>/instrument/<int:instrument_id>/')
@@ -170,7 +174,8 @@ def showInstrument(category_id, instrument_id):
     instrument = session.query(Instrument).filter_by(id=instrument_id).one()
     category = session.query(Category).filter_by(id=instrument.category_id).one()
     return render_template(
-        'showinstrument.html', instrument=instrument, category=category)
+        'showinstrument.html', logged_in=('username' in login_session),
+        instrument=instrument, category=category)
 
 # NEW INSTRUMENT SCREEN
 @app.route('/category/<int:category_id>/instrument/new', methods=['GET', 'POST'])
@@ -188,7 +193,9 @@ def newInstrument(category_id):
         session.commit()
         return redirect(url_for('showCategory', category_id=cat_id))
     else:
-        return render_template('newinstrument.html', category_id=category_id, categories=categories)
+        return render_template(
+            'newinstrument.html', logged_in=('username' in login_session),
+            category_id=category_id, categories=categories)
 
 # EDIT INSTRUMENT SCREEN
 @app.route('/category/<int:category_id>/instrument/<int:instrument_id>/edit',
@@ -211,7 +218,8 @@ def editInstrument(category_id, instrument_id):
             instrument_id=editedInstrument.id   ))
     else:
         return render_template(
-            'editinstrument.html', categories=categories, item=editedInstrument)
+            'editinstrument.html', logged_in=('username' in login_session),
+            categories=categories, item=editedInstrument)
 
 # DELETE INSTRUMENT SCREEN
 @app.route('/category/<int:category_id>/instrument/<int:instrument_id>/delete',
@@ -225,7 +233,8 @@ def deleteInstrument(category_id, instrument_id):
         session.commit()
         return redirect(url_for('showCategory', category_id=category_id))
     else:
-        return render_template('deleteInstrument.html', item=itemToDelete)
+        return render_template(
+            'deleteInstrument.html', logged_in=('username' in login_session), item=itemToDelete)
 
 # HELPER FUNCTION - given a category name, return its ID
 def getCategoryId(catName):
@@ -257,7 +266,7 @@ def instrumentsJSON():
 @app.route('/instrument/<int:instrument_id>/JSON')
 def instrumentJSON(instrument_id):
     instrument = session.query(Instrument).filter_by(id=instrument_id).one()
-    return jsonify(Instrument=instrument.serialize)
+    return jsonify(Instrument=instrumenty.serialize)
 
 
 if __name__ == '__main__':

@@ -1,5 +1,5 @@
-<html>
-<body>
+{% extends "layout.html" %}
+{% block main %}
 
 <h1> Edit Instrument </h1>
 
@@ -27,5 +27,4 @@
 
 <a href = '{{url_for('showCategory', category_id=item.category_id)}}'> Cancel </a>
 
-</body>
-</html>
+{% endblock %}
