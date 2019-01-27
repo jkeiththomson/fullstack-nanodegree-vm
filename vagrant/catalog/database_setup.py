@@ -15,7 +15,7 @@ class Category(Base):
 
     name = Column(String(250), nullable=False)
     id = Column(Integer, primary_key=True)
-    description = Column(String(250), nullable=False)
+    description = Column(String(1200), nullable=False)
 
     @property
     def serialize(self):
@@ -32,7 +32,9 @@ class Instrument(Base):
 
     name = Column(String(80), nullable=False)
     id = Column(Integer, primary_key=True)
-    description = Column(String(250))
+    description = Column(String(1200))
+    picture_url = Column(String(250))
+    picture_attr = Column(String(250))
     category_id = Column(Integer, ForeignKey('category.id'))
     # category = relationship(Category)
 
@@ -43,6 +45,9 @@ class Instrument(Base):
             'name': self.name,
             'id': self.id,
             'description': self.description,
+            'picture_url': self.picture_url,
+            'picture_attr': self.picture_attr,
+            'category_id': self.category_id,
         }
 
 # create the database
