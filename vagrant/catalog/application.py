@@ -23,7 +23,6 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-
 ############## AUTHENITCATION ##################
 # LOGIN SCREEN - Create anti-forgery state token
 @app.route('/login')
@@ -138,9 +137,10 @@ def gdisconnect():
     if result['status'] == '200':
         del login_session['access_token']
         del login_session['gplus_id']
-        del login_session['username']
         del login_session['email']
         del login_session['picture']
+        del login_session['username']
+
         response = make_response(json.dumps('Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
         return response
@@ -155,8 +155,9 @@ def gdisconnect():
 @app.route('/orchestra/')
 def showOrchestra():
     categories = session.query(Category).all()
+    uname = getUsername()
     return render_template(
-        'showorchestra.html', logged_in=('username' in login_session), categories=categories)
+        'showorchestra.html', username=uname, categories=categories)
 
 # CATEGORY SCREEN - Orchestra page with a category selected
 @app.route('/category/<int:category_id>/')
@@ -164,8 +165,9 @@ def showCategory(category_id):
     categories = session.query(Category).all()
     category = session.query(Category).filter_by(id=category_id).one()
     instruments = session.query(Instrument).filter_by(category_id=category_id)
+    uname = getUsername()
     return render_template(
-        'showcategory.html', logged_in=('username' in login_session), categories=categories,
+        'showcategory.html', username=uname, categories=categories,
         category=category, instruments=instruments, category_id=category_id)
 
 # INSTRUMENT DETAILS SCREEN
@@ -173,8 +175,9 @@ def showCategory(category_id):
 def showInstrument(category_id, instrument_id):
     instrument = session.query(Instrument).filter_by(id=instrument_id).one()
     category = session.query(Category).filter_by(id=instrument.category_id).one()
+    uname = getUsername()
     return render_template(
-        'showinstrument.html', logged_in=('username' in login_session),
+        'showinstrument.html', username=uname,
         instrument=instrument, category=category)
 
 # NEW INSTRUMENT SCREEN
@@ -183,6 +186,7 @@ def newInstrument(category_id):
     if 'username' not in login_session:
         return redirect(url_for('showLogin'))
     categories = session.query(Category).all()
+    uname = getUsername()
     if request.method == 'POST':
         cat_id = getCategoryId(request.form['category'])
         newItem = Instrument(
@@ -194,7 +198,7 @@ def newInstrument(category_id):
         return redirect(url_for('showCategory', category_id=cat_id))
     else:
         return render_template(
-            'newinstrument.html', logged_in=('username' in login_session),
+            'newinstrument.html', username=uname,
             category_id=category_id, categories=categories)
 
 # EDIT INSTRUMENT SCREEN
@@ -205,6 +209,7 @@ def editInstrument(category_id, instrument_id):
         return redirect(url_for('showLogin'))
     categories = session.query(Category).all()
     editedInstrument = session.query(Instrument).filter_by(id=instrument_id).one()
+    uname = getUsername()
     if request.method == 'POST':
         if request.form['name']:
             editedInstrument.name = request.form['name']
@@ -218,7 +223,7 @@ def editInstrument(category_id, instrument_id):
             instrument_id=editedInstrument.id   ))
     else:
         return render_template(
-            'editinstrument.html', logged_in=('username' in login_session),
+            'editinstrument.html', username=uname,
             categories=categories, item=editedInstrument)
 
 # DELETE INSTRUMENT SCREEN
@@ -228,20 +233,28 @@ def deleteInstrument(category_id, instrument_id):
     if 'username' not in login_session:
         return redirect(url_for('showLogin'))
     itemToDelete = session.query(Instrument).filter_by(id=instrument_id).one()
+    uname = getUsername()
     if request.method == 'POST':
         session.delete(itemToDelete)
         session.commit()
         return redirect(url_for('showCategory', category_id=category_id))
     else:
         return render_template(
-            'deleteInstrument.html', logged_in=('username' in login_session), item=itemToDelete)
+            'deleteInstrument.html', username=uname, item=itemToDelete)
 
-# HELPER FUNCTION - given a category name, return its ID
+# HELPER FUNCTIONS
+# given a category name, return its ID
 def getCategoryId(catName):
     categories = session.query(Category).all()
     for c in categories:
         if c.name == catName:
             return c.id
+    return None
+
+# get logged in user's name
+def getUsername():
+    if 'username' in login_session:
+        return login_session['username']
     return None
 
 # API - Return all categories
