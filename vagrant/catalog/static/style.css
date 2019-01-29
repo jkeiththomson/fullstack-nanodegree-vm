@@ -1,0 +1,160 @@
+@charset "utf-8";
+/* CSS Document */
+
+body,th,p{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 18px;
+	color: #333;
+	line-height: 1.5;
+}
+body {
+	background-color: #bbb;
+	margin: 0;
+	position:relative;
+	max-width: 1000px;
+	min-width: 320px;
+}
+ul {
+  margin-top: 5px;
+}
+ul, li {
+	font-family: Arial, Helvetica, sans-serif;
+	color: #333;
+}
+a {
+	color: #3397db;
+	text-decoration: none;
+}
+a:hover, a:focus {
+	color: #3397db;
+	text-decoration: none;
+}
+a.selected {
+  color: orange;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  margin: 0;
+}
+article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+main {
+  background-color: #fff;
+  min-height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 20px 30px;
+}
+footer {
+  width: auto;
+  background-color: #3397db;
+  color: #ccc;
+  font-size: 12px;
+  letter-spacing: 1px;
+  padding: 25px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+nav {
+  display: inline-block;
+  width: 100%;
+}
+
+nav h2 {
+  color: #bbb;
+  font-style: italic;
+  text-transform: uppercase;
+}
+
+article, form {
+  display: inline-block;
+  width: 100%;
+}
+
+img {
+  display: block;
+  margin: 20px 0;
+}
+
+article img {
+  max-height: 300px;
+  width: auto;
+  max-width: 100%;
+}
+
+article img.hero {
+  width: 100%;
+  height: auto;
+  max-height: 1000px;
+  margin: 0 0 20px 0;
+}
+
+h1 {
+  width: 100%;
+  min-width: 320px;
+  height: 80px;
+  line-height: 80px;
+  background-color: #3397db;
+  text-align:center;
+  color: #fff;
+  font-weight: 200;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+label {
+  display: block;
+}
+input[type=button], input[type=submit] {
+  background-color: orange;
+  border: none;
+  color: white;
+  padding: 12px 32px;
+  text-decoration: none;
+  margin: 4px 2px;
+  font-size: 20px;
+  cursor: pointer;
+  min-width: 130px;
+}
+
+input[type=text], textarea {
+  font-size: 16px;
+  width: 90%;
+}
+
+input[type=radio] {
+  margin:  0 10px 0 20px;
+}
+.login {
+  color: #bbb;
+  background-color: #fff;
+  text-align: right;
+  padding: 20px 30px 0 20px;
+}
+
+.login div span {
+  padding-left: 10px;
+}
+
+/* ====================== Media Queries ====================== */
+@media only screen and (min-width: 640px) {
+  nav {
+    width: 33.3333%;
+  }
+  article, form {
+    width: 66.6666%
+  }
+}
+
+@media only screen and (min-width: 1000px) {
+  body {
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 26px;
+  }
+}

@@ -1,41 +1,50 @@
-{% extends "layout.html" %}
+	{% extends "layout.html" %}
 {% block main %}
 
 <nav>
     <h2>Add New Instrument</h2>
     <p>
-        <a href="{{url_for( 'showCategory', category_id=category.id)}}">Return to Orchestra</a>
+        <a href="{{url_for('showCategory', category_id=category_id)}}"> < Back</a>
     </p>
 </nav>
 
 <form action="{{ url_for('newInstrument', category_id=category_id)}}" method='post'>
 
-	<p>Name:</p>
-	<input type ='text' size='30' name='name'>
+	<h2> Add New Instrument </h3>
 
-	<p>Description:</p>
-	<textarea name='description' rows='5' cols='40'></textarea>
-
-	<p>Category:</p>
-	{% if categories %}
-		{% for c in categories %}
-			{% if category_id == c.id %}
-				<input type='radio' name='category' value='{{c.name}}' checked >{{c.name}}
-			{%else%}
-				<input type='radio' name='category' value='{{c.name}}'>{{c.name}}
-		    {% endif %}
-		{% endfor %}
-	{% endif %}
-
-	<p>Picture URL:</p>
-	<input type ='text' size='200' name='picture_url'>
-
-	<p>Picture Attribution:</p>
-	<input type ='text' size='200' name='picture_attr'>
-
-	<input type='submit' value='Add Instrument'>
+	<p>
+		<label>Name:</label>
+		<input type ='text' name='name'>
+	</p>
+	<p>
+		<label>Description:</label>
+		<textarea name='description' rows='5'></textarea>
+	</p>
+	<p>
+		<label>Category:</label>
+		{% if categories %}
+			{% for c in categories %}
+				{% if category_id == c.id %}
+					<input type='radio' name='category' value='{{c.name}}' checked >{{c.name}}
+				{%else%}
+					<input type='radio' name='category' value='{{c.name}}'>{{c.name}}
+			    {% endif %}
+			{% endfor %}
+		{% endif %}
+	</p>
+	<p>
+		<label>Picture URL:</label>
+		<input type ='text' name='picture_url''>
+	</p>
+	<p>
+		<label>Picture Attribution:</label>
+		<textarea name='picture_attr'></textarea>
+	</p>
+	<p>
+		<input type='submit', value='Add Instrument'>
+		<input type='button', value='Cancel',
+			onclick="window,location.href='{{url_for('showCategory', category_id=category_id)}}' ">
+	</p>
 </form>
-
-<a href = '{{url_for('showCategory', category_id=category_id)}}'> Cancel </a>
 
 {% endblock %}

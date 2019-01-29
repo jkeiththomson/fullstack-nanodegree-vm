@@ -1,36 +1,50 @@
-{% extends "layout.html" %}
+	{% extends "layout.html" %}
 {% block main %}
 
-<h1> Edit Instrument </h1>
+<nav>
+    <h2>Edit Instrument</h2>
+    <p>
+        <a href="{{url_for('showInstrument', category_id=item.category_id, instrument_id=item.id)}}"> < Back</a>
+    </p>
+</nav>
 
 <form action="{{ url_for('editInstrument', category_id=item.category_id, instrument_id=item.id)}}" method='post'>
 
-	<p>Name:</p>
-	<input type ='text' size='30' name='name' value='{{item.name }}'>
+	<h2> Edit {{item.name}} </h3>
 
-	<p>Description:</p>
-	<textarea name='description' rows='5' cols='40'>{{item.description}}</textarea>
-
-	<p>Category:</p>
-	{% if categories %}
-		{% for c in categories %}
-			{% if item.category_id == c.id %}
-				<input type='radio' name='category' value='{{c.name}}' checked >{{c.name}}
-			{%else%}
-				<input type='radio' name='category' value='{{c.name}}'>{{c.name}}
-		    {% endif %}
-		{% endfor %}
-	{% endif %}
-
-	<p>Picture URL:</p>
-	<input type ='text' size='200' name='picture_url' value='{{item.picture_url }}'>
-
-	<p>Picture Attribution:</p>
-	<input type ='text' size='200' name='name' value='{{item.picture_attr }}'>
-
-	<input type='submit' value='Edit'>
+	<p>
+		<label>Name:</label>
+		<input type ='text' name='name' value='{{item.name }}'>
+	</p>
+	<p>
+		<label>Description:</label>
+		<textarea name='description' rows='5'>{{item.description}}</textarea>
+	</p>
+	<p>
+		<label>Category:</label>
+		{% if categories %}
+			{% for c in categories %}
+				{% if item.category_id == c.id %}
+					<input type='radio' name='category' value='{{c.name}}' checked >{{c.name}}
+				{%else%}
+					<input type='radio' name='category' value='{{c.name}}'>{{c.name}}
+			    {% endif %}
+			{% endfor %}
+		{% endif %}
+	</p>
+	<p>
+		<label>Picture URL:</label>
+		<input type ='text' name='picture_url' value='{{item.picture_url }}'>
+	</p>
+	<p>
+		<label>Picture Attribution:</label>
+		<textarea name='picture_attr'>{{item.picture_attr }}</textarea>
+	</p>
+	<p>
+		<input type='submit', value='Save'>
+		<input type='button', value='Cancel',
+			onclick="window,location.href='{{url_for('showInstrument', category_id=item.category_id, instrument_id=item.id)}}' ">
+	</p>
 </form>
-
-<a href = '{{url_for('showCategory', category_id=item.category_id)}}'> Cancel </a>
 
 {% endblock %}
