@@ -16,9 +16,10 @@ This is my solution to the "Item Catalog" project from Udacity's "Full Stack Web
 - The project relies on a Vagrant virtual machine (VM) that was pre-setup by Udacity. Instructions for setting up the VM can be found here: https://www.udacity.com/wiki/ud088/vagrant. The VM is a Linux server that will serve up this project's website.
 - In your own OS (not the VM), browse to GitHub and log into your personal GitHub account. Navigate to the repository for this project: https://github.com/udacity/fullstack-nanodegree-vm
 - Fork the repository and clone it to your computer (see the instructions at https://www.udacity.com/wiki/ud088/vagrant)
+- Maker sure you're on the "master" braanch
 - cd into the .../vagrant/catalog folder
 - Run the virtual machine (vagrant up) and log into it (vagrant ssh)
-- To set up the website's database on the VM:
+- **IMPORTANT!** To set up the website's database on the VM:
   - cd to /vagrant/catalog
   - run "python database_setup.py" to create the database ("orchestra.db")
   - run "python database_fill.py" to fill up the tables with data
@@ -43,7 +44,7 @@ The photos are mostly taken from wikipedia.org. Hover the mouse over a photo to 
 
 All the new code is my own, based on snippets from the course materials.
 
-There is one citation in styles.sss for some css code I borrowed to show the photo captions.
+There is one citation in styles.css for some css code I borrowed to show the photo captions.
 
 ## Contributing
 
