@@ -167,6 +167,10 @@ input[type=radio] {
   width: 33.3333%
 }
 
+#login-status {
+  visibility: hidden;
+}
+
 /* ====================== Media Queries ====================== */
 @media only screen and (min-width: 640px) {
   nav {
