@@ -13,7 +13,10 @@
 
 <article>
 	<h2>{{instrument.name}} ({{category.name}})</h2>
-    <img src="{{instrument.picture_url}}" alt="{{instrument.name}}"
+	<figure>
+		<img src="{{instrument.picture_url}}" alt="{{instrument.name}}">
+        <figcaption>{{instrument.picture_attr}}</figcaption>
+    </figure>
     <p>{{instrument.description}}</p>
     <p>
         <a href="{{url_for( 'editInstrument', category_id=category.id, instrument_id=instrument.id)}}">Edit</a> |
