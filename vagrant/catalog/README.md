@@ -14,8 +14,8 @@ This is my solution to the "Item Catalog" project from Udacity's "Full Stack Web
 ### To install and run the website:
 
 - The project relies on a Vagrant virtual machine (VM) that was pre-setup by Udacity. Instructions for setting up the VM can be found here: https://www.udacity.com/wiki/ud088/vagrant. The VM is a Linux server that will serve up this project's website.
-- In your own OS (not the VM), browse to GitHub and log into your personal GitHub account. Navigate to the repository for this project: https://github.com/udacity/fullstack-nanodegree-vm
-- Fork the repository and clone it to your computer (see the instructions at https://www.udacity.com/wiki/ud088/vagrant)
+- In your own OS (not the VM), browse to GitHub and log into your personal GitHub account. Navigate to my repository for this project: https://github.com/jkeiththomson/fullstack-nanodegree-vm
+- Clone the repository to your computer (see the instructions at https://www.udacity.com/wiki/ud088/vagrant)
 - Maker sure you're on the "master" braanch
 - cd into the .../vagrant/catalog folder
 - Run the virtual machine (vagrant up) and log into it (vagrant ssh)
