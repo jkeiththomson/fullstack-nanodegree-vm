@@ -294,4 +294,4 @@ def instrumentJSON(instrument_id):
 if __name__ == '__main__':
     app.secret_key = 'a_really_really_secret_key'
     app.debug = True
-    app.run(host='0.0.0.0', port=8000)
+    app.run(host='0.0.0.0', port=5000)
