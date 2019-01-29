@@ -24,6 +24,7 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 ############## AUTHENITCATION ##################
+
 # LOGIN SCREEN - Create anti-forgery state token
 @app.route('/login')
 def showLogin():
@@ -31,7 +32,7 @@ def showLogin():
                     for x in xrange(32))
     login_session['state'] = state
     return render_template(
-        'login.html', STATE=state)
+        'showlogin.html', STATE=state)
 
 # GOOGLE CONNECT - user logs in with Google+ credentials
 @app.route('/gconnect', methods=['POST'])
@@ -62,6 +63,7 @@ def gconnect():
            % access_token)
     h = httplib2.Http()
     result = json.loads(h.request(url, 'GET')[1])
+
     # if google didn't verify the access token, return an error
     if result.get('error') is not None:
         response = make_response(json.dumps(result.get('error')), 500)
@@ -97,7 +99,7 @@ def gconnect():
     login_session['access_token'] = credentials.access_token
     login_session['gplus_id'] = gplus_id
 
-    # use gogle+ api to get some user info
+    # use google+ api to get some user info
     userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
     params = {'access_token': credentials.access_token, 'alt': 'json'}
     answer = requests.get(userinfo_url, params=params)
@@ -146,7 +148,9 @@ def gdisconnect():
         return response
 
 
-# MAIN SCREEN - Orchestra page with no category selected
+############## USER INTERFACE SCREENS ##################
+
+# HOME SCREEN - Orchestra page with no category selected
 @app.route('/')
 @app.route('/orchestra/')
 def showOrchestra():
@@ -259,6 +263,9 @@ def getUsername():
         return login_session['username']
     return None
 
+
+############## HANDLE API REQUESTS ##################
+
 # API - Return all categories
 @app.route('/categories/JSON')
 def categoriesJSON():
@@ -287,4 +294,4 @@ def instrumentJSON(instrument_id):
 if __name__ == '__main__':
     app.secret_key = 'a_really_really_secret_key'
     app.debug = True
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=8000)

@@ -1,3 +1,6 @@
+<!--
+	Edit an instrument
+-->
 {% extends "layout.html" %}
 
 {% block back %}
@@ -15,16 +18,13 @@
 
 	<h2> Edit {{item.name}} </h3>
 
-	<p>
-		<label>Name:</label>
-		<input type ='text' name='name' value='{{item.name }}'>
-	</p>
-	<p>
-		<label>Description:</label>
-		<textarea name='description' rows='5'>{{item.description}}</textarea>
-	</p>
-	<p>
-		<label>Category:</label>
+	<p>	<label>Name:</label>
+		<input type ='text' name='name' value='{{item.name }}'>	</p>
+
+	<p> <label>Description:</label>
+		<textarea name='description' rows='5'>{{item.description}}</textarea> </p>
+
+	<p> <label>Category:</label>
 		{% if categories %}
 			{% for c in categories %}
 				{% if item.category_id == c.id %}
@@ -35,19 +35,16 @@
 			{% endfor %}
 		{% endif %}
 	</p>
-	<p>
-		<label>Picture URL:</label>
-		<input type ='text' name='picture_url' value='{{item.picture_url }}'>
-	</p>
-	<p>
-		<label>Picture Attribution:</label>
-		<textarea name='picture_attr'>{{item.picture_attr }}</textarea>
-	</p>
-	<p>
-		<input type='submit', value='Save'>
+
+	<p> <label>Picture URL:</label>
+		<input type ='text' name='picture_url' value='{{item.picture_url }}'> </p>
+
+	<p> <label>Picture Attribution:</label>
+		<textarea name='picture_attr'>{{item.picture_attr }}</textarea>	</p>
+
+	<p> <input type='submit', value='Save'>
 		<input type='button', value='Cancel',
-			onclick="window,location.href='{{url_for('showInstrument', category_id=item.category_id, instrument_id=item.id)}}' ">
-	</p>
+			onclick="window,location.href='{{url_for('showInstrument', category_id=item.category_id, instrument_id=item.id)}}' "> </p>
 </form>
 
 {% endblock %}

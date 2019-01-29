@@ -1,3 +1,6 @@
+<!--
+	Add a new instrument
+-->
 {% extends "layout.html" %}
 
 {% block back %}
@@ -15,16 +18,13 @@
 
 	<h3> Fill in the details for this instrument </h3>
 
-	<p>
-		<label>Name:</label>
-		<input type ='text' name='name'>
-	</p>
-	<p>
-		<label>Description:</label>
-		<textarea name='description' rows='5'></textarea>
-	</p>
-	<p>
-		<label>Category:</label>
+	<p> <label>Name:</label>
+		<input type ='text' name='name'> </p>
+
+	<p> <label>Description:</label>
+		<textarea name='description' rows='5'></textarea> </p>
+
+	<p> <label>Category:</label>
 		{% if categories %}
 			{% for c in categories %}
 				{% if category_id == c.id %}
@@ -35,19 +35,16 @@
 			{% endfor %}
 		{% endif %}
 	</p>
-	<p>
-		<label>Picture URL:</label>
-		<input type ='text' name='picture_url''>
-	</p>
-	<p>
-		<label>Picture Attribution:</label>
-		<textarea name='picture_attr'></textarea>
-	</p>
-	<p>
-		<input type='submit', value='Add Instrument'>
+
+	<p> <label>Picture URL:</label>
+		<input type ='text' name='picture_url''> </p>
+
+	<p>	<label>Picture Attribution:</label>
+		<textarea name='picture_attr'></textarea> </p>
+
+	<p>	<input type='submit', value='Add Instrument'>
 		<input type='button', value='Cancel',
-			onclick="window,location.href='{{url_for('showCategory', category_id=category_id)}}' ">
-	</p>
+			onclick="window,location.href='{{url_for('showCategory', category_id=category_id)}}' ">	</p>
 </form>
 
 {% endblock %}

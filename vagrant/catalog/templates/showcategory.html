@@ -1,3 +1,6 @@
+<!--
+	Show the instruments in one category
+-->
 {% extends "layout.html" %}
 
 {% block back %}
@@ -24,7 +27,6 @@
 			<li>No categories in list!</li>
 		{% endif %}
 	</ul>
-
 </nav>
 
 <article>
@@ -45,7 +47,9 @@
 			<li>No instruments in list!</li>
 		{% endif %}
 	</ul>
+
 	<a href="{{url_for('newInstrument', category_id=category_id)}}"> Add a new instrument </a>
+
 </article>
 
 {% endblock %}

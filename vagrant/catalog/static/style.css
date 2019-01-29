@@ -9,6 +9,7 @@ body,th,p{
   margin: 0;
   padding: 0;
 }
+
 body {
 	background-color: #333;
 	margin: 0;
@@ -16,35 +17,32 @@ body {
 	max-width: 1000px;
 	min-width: 320px;
 }
+
 ul {
   margin-top: 5px;
 }
-ul, li {
-	font-family: Arial, Helvetica, sans-serif;
-	color: #333;
-}
+
 p {
   margin: 0 0 20px 0;
 }
-a {
+
+a, a:hover, a:focus, a:visited {
 	color: #3397db;
 	text-decoration: none;
 }
-a:hover, a:focus {
-	color: #3397db;
-	text-decoration: none;
-}
+
 a.selected {
   color: orange;
 }
+
 h1, h2, h3, h4, h5, h6 {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 18px;
   margin: 0;
 }
+
 article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+
 main {
   background-color: #fff;
   min-height: 100%;
@@ -52,6 +50,7 @@ main {
   flex-wrap: wrap;
   padding: 20px 30px;
 }
+
 footer {
   width: auto;
   background-color: #3397db;
@@ -79,19 +78,6 @@ article, form {
   width: 100%;
 }
 
-article img {
-  max-height: 300px;
-  width: auto;
-  max-width: 100%;
-}
-
-article img.hero {
-  width: 100%;
-  height: auto;
-  max-height: 1000px;
-  margin: 0;
-}
-
 h1 {
   width: 100%;
   min-width: 320px;
@@ -104,6 +90,10 @@ h1 {
   letter-spacing: 3px;
   text-transform: uppercase;
   margin: 0;
+}
+
+h2, h3 {
+  font-size: 18px;
 }
 
 h3 {
@@ -134,6 +124,7 @@ input[type=text], textarea {
 input[type=radio] {
   margin:  0 10px 0 20px;
 }
+
 .status-bar, .login, .back-arrow {
   background-color: #dedeff;
 }
@@ -149,26 +140,25 @@ input[type=radio] {
   color: #aaa;
 }
 
+.back-arrow {
+  width: 20%;
+}
+
 .login div span {
   padding-left: 10px;
 }
 
 .login {
   text-align: right;
-  width: 66.6666%;
-}
-
-.back-arrow {
-  width: 33.3333%
+  width: 80%;
 }
 
 #login-status {
   visibility: hidden;
 }
 
-
-/* the following css for showing a caption sliding up
- * over an an image on mouseover was modfied from this stackoverlow post:
+/* the following css shows the picture caption when you mouse over an iamge
+ * it was modfied from this stackoverflow post:
  * https://stackoverflow.com/questions/35408661/animated-figcaption-overlay-deriving-width-from-image
  */
 figure {
@@ -178,10 +168,15 @@ figure {
   margin: 10px 0;
   padding: 0;
 }
+
 figure img {
   display: block;
   margin: 0;
+  max-height: 320px;
+  width: auto;
+  max-width: 100%;
 }
+
 figcaption {
   position: absolute;
   background: rgba(0, 0, 0, .5);
@@ -195,6 +190,7 @@ figcaption {
   transform: translateY(0%);
   transition: all .75s ease;
 }
+
 figure:hover figcaption {
   opacity: 1;
   transform: translateY(-100%);
@@ -202,10 +198,11 @@ figure:hover figcaption {
 /* ====================== Media Queries ====================== */
 @media only screen and (min-width: 640px) {
   nav {
-    width: 33.3333%;
+    width: 30%;
   }
   article, form {
-    width: 66.6666%
+    width: calc(70% - 20px);
+    padding-left: 20px;
   }
 }
 
