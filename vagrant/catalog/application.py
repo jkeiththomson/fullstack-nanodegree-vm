@@ -272,7 +272,7 @@ def categoriesJSON():
     categories = session.query(Category).all()
     return jsonify(Categories=[c.serialize for c in categories])
 
-# API - return a single category
+# API - Return a single category
 @app.route('/category/<int:category_id>/JSON')
 def categoryJSON(category_id):
     category = session.query(Category).filter_by(id=category_id).one()
@@ -284,11 +284,11 @@ def instrumentsJSON():
     instruments = session.query(Instrument).all()
     return jsonify(Instruments=[i.serialize for i in instruments])
 
-# API - return a single instrument
+# API - Return a single instrument
 @app.route('/instrument/<int:instrument_id>/JSON')
 def instrumentJSON(instrument_id):
     instrument = session.query(Instrument).filter_by(id=instrument_id).one()
-    return jsonify(Instrument=instrumenty.serialize)
+    return jsonify(Instrument=instrument.serialize)
 
 
 if __name__ == '__main__':
