@@ -14,9 +14,18 @@
 </head>
 
 <body>
-	<header id="header">
+	<header>
 		{% block header %}
-			<h1>The Symphony Orchestra</h1>
+		<h1>The Symphony Orchestra</h1>
+		{% endblock %}
+
+		<section class="status-bar">
+
+		    {% block back %}
+			<div class="back-arrow"></div>
+			{% endblock %}
+
+		    {% block login %}
 			<div class="login">
 				{% if username %}
 				<div>
@@ -24,10 +33,14 @@
 					<span><a href="{{ url_for('gdisconnect')}}">Log out</a></span>
 				</div>
 				{% else %}
+				<div>
 					<span><a href="{{ url_for('showLogin')}}">Log in</a></span>
+				</div>
 				{% endif %}
+			</div>
+			{% endblock %}
 
-		{% endblock %}
+		</section>
 	</header>
 
 	<main>
@@ -39,7 +52,7 @@
 		{% block footer %}
 			Copyright &copy; 2019 by J. Keith Thomson
 		{% endblock %}
-	</footer>f
+	</footer>
 </body>
 
 </html>

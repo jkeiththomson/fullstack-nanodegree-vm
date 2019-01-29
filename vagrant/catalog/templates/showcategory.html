@@ -1,6 +1,12 @@
 {% extends "layout.html" %}
-{% block main %}
 
+{% block back %}
+<div class="back-arrow">
+    <a href="{{url_for('showOrchestra')}}"> < Home</a>
+</div>
+{% endblock %}
+
+{% block main %}
 <nav>
 	<h2>Orchestra Sections</h2>
 	<ul>
@@ -18,9 +24,6 @@
 			<li>No categories in list!</li>
 		{% endif %}
 	</ul>
-    <p>
-        <a href="{{url_for('showOrchestra')}}"> < Home</a>
-    </p>
 
 </nav>
 

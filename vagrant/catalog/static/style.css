@@ -10,7 +10,7 @@ body,th,p{
   padding: 0;
 }
 body {
-	background-color: #bbb;
+	background-color: #333;
 	margin: 0;
 	position:relative;
 	max-width: 1000px;
@@ -81,7 +81,7 @@ article, form {
 
 img {
   display: block;
-  margin: 20px 0;
+  margin: 10px 0 20px;
 }
 
 article img {
@@ -139,15 +139,32 @@ input[type=text], textarea {
 input[type=radio] {
   margin:  0 10px 0 20px;
 }
-.login {
-  color: #bbb;
-  background-color: #fff;
-  text-align: right;
-  padding: 20px 30px 0 20px;
+.status-bar, .login, .back-arrow {
+  background-color: #dedeff;
+}
+
+.status-bar {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px 30px;
+}
+
+.login, .back-arrow {
+  display: inline-block;
+  color: #aaa;
 }
 
 .login div span {
   padding-left: 10px;
+}
+
+.login {
+  text-align: right;
+  width: 66.6666%;
+}
+
+.back-arrow {
+  width: 33.3333%
 }
 
 /* ====================== Media Queries ====================== */
