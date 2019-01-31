@@ -22,7 +22,6 @@ This is my solution to the "Item Catalog" project from Udacity's "Full Stack Web
 - **IMPORTANT!** To set up the website's database on the VM:
   - cd to /vagrant/catalog
   - run "python database_setup.py" to create the database ("orchestra.db")
-  - run "python database_fill.py" to fill up the tables with data
   - run "python application.py" to start the server
 - To see the project website
   - Fire up your browser of choice on your computer (not the VM)
