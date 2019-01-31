@@ -3,7 +3,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Category, Instrument
 from flask import session as login_session
-import random,  string
+import random
+import string
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 import httplib2
@@ -17,13 +18,15 @@ CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "Catalog"
 
-engine = create_engine('sqlite:///orchestra.db',connect_args={'check_same_thread': False})
+engine = create_engine(
+    'sqlite:///orchestra.db',
+    connect_args={'check_same_thread': False})
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-############## AUTHENITCATION ##################
+# --------------- AUTHENITCATION ----------------
 
 # LOGIN SCREEN - Create anti-forgery state token
 @app.route('/login')
@@ -90,8 +93,8 @@ def gconnect():
     stored_access_token = login_session.get('access_token')
     stored_gplus_id = login_session.get('gplus_id')
     if stored_access_token is not None and gplus_id == stored_gplus_id:
-        response = make_response(json.dumps('Current user is already connected.'),
-                                 200)
+        response = make_response(
+            json.dumps('Current user is already connected.'), 200)
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -139,16 +142,18 @@ def gdisconnect():
         del login_session['picture']
         del login_session['username']
 
-        response = make_response(json.dumps('Successfully disconnected.'), 200)
+        response = make_response(
+            json.dumps('Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
         return redirect(url_for('showOrchestra'))
     else:
-        response = make_response(json.dumps('Failed to revoke token for given user.', 400))
+        response = make_response(
+            json.dumps('Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
         return response
 
 
-############## USER INTERFACE SCREENS ##################
+# ---------------- USER INTERFACE SCREENS ------------------
 
 # HOME SCREEN - Orchestra page with no category selected
 @app.route('/')
@@ -173,15 +178,18 @@ def showCategory(category_id):
 # INSTRUMENT DETAILS SCREEN
 @app.route('/category/<int:category_id>/instrument/<int:instrument_id>/')
 def showInstrument(category_id, instrument_id):
-    instrument = session.query(Instrument).filter_by(id=instrument_id).one()
-    category = session.query(Category).filter_by(id=instrument.category_id).one()
+    instrument = session.query(
+        Instrument).filter_by(id=instrument_id).one()
+    category = session.query(
+        Category).filter_by(id=instrument.category_id).one()
     uname = getUsername()
     return render_template(
         'showinstrument.html', username=uname,
         instrument=instrument, category=category)
 
 # NEW INSTRUMENT SCREEN
-@app.route('/category/<int:category_id>/instrument/new', methods=['GET', 'POST'])
+@app.route('/category/<int:category_id>/instrument/new',
+           0methods=['GET', 'POST'])
 def newInstrument(category_id):
     if 'username' not in login_session:
         return redirect(url_for('showLogin'))
@@ -203,14 +211,17 @@ def newInstrument(category_id):
             'newinstrument.html', username=uname,
             category_id=category_id, categories=categories)
 
+
 # EDIT INSTRUMENT SCREEN
-@app.route('/category/<int:category_id>/instrument/<int:instrument_id>/edit',
-           methods=['GET', 'POST'])
+@app.route(
+    '/category/<int:category_id>/instrument/<int:instrument_id>/edit',
+    methods=['GET', 'POST'])
 def editInstrument(category_id, instrument_id):
     if 'username' not in login_session:
         return redirect(url_for('showLogin'))
     categories = session.query(Category).all()
-    editedInstrument = session.query(Instrument).filter_by(id=instrument_id).one()
+    editedInstrument = session.query(
+        Instrument).filter_by(id=instrument_id).one()
     uname = getUsername()
     if request.method == 'POST':
         if request.form['name']:
@@ -222,15 +233,19 @@ def editInstrument(category_id, instrument_id):
         if request.form['picture_attr']:
             editedInstrument.picture_attr = request.form['picture_attr']
         if request.form['category']:
-            editedInstrument.category_id = getCategoryId(request.form['category'])
+            editedInstrument.category_id =
+            getCategoryId(request.form['category'])
         session.add(editedInstrument)
         session.commit()
-        return redirect(url_for('showInstrument', category_id=editedInstrument.category_id,
-            instrument_id=editedInstrument.id   ))
+        return redirect(
+            url_for('showInstrument',
+                    category_id=editedInstrument.category_id,
+                    instrument_id=editedInstrument.id))
     else:
         return render_template(
             'editinstrument.html', username=uname,
             categories=categories, item=editedInstrument)
+
 
 # DELETE INSTRUMENT SCREEN
 @app.route('/category/<int:category_id>/instrument/<int:instrument_id>/delete',
@@ -238,7 +253,8 @@ def editInstrument(category_id, instrument_id):
 def deleteInstrument(category_id, instrument_id):
     if 'username' not in login_session:
         return redirect(url_for('showLogin'))
-    itemToDelete = session.query(Instrument).filter_by(id=instrument_id).one()
+    itemToDelete = session.query(
+        Instrument).filter_by(id=instrument_id).one()
     uname = getUsername()
     if request.method == 'POST':
         session.delete(itemToDelete)
@@ -247,6 +263,7 @@ def deleteInstrument(category_id, instrument_id):
     else:
         return render_template(
             'deleteInstrument.html', username=uname, item=itemToDelete)
+
 
 # HELPER FUNCTIONS
 # given a category name, return its ID
@@ -257,6 +274,7 @@ def getCategoryId(catName):
             return c.id
     return None
 
+
 # get logged in user's name
 def getUsername():
     if 'username' in login_session:
@@ -264,7 +282,7 @@ def getUsername():
     return None
 
 
-############## HANDLE API REQUESTS ##################
+# ------------- HANDLE API REQUESTS -----------------
 
 # API - Return all categories
 @app.route('/categories/JSON')

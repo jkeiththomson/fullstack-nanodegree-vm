@@ -9,7 +9,8 @@ from sqlalchemy.orm import sessionmaker
 
 Base = declarative_base()
 
-###################### Category table ######################
+
+# ------------------ Category table ---------------------
 class Category(Base):
     __tablename__ = 'category'
 
@@ -26,7 +27,8 @@ class Category(Base):
             'description': self.description,
         }
 
-##################### Instrument table #####################
+
+# ---------------- Instrument table --------------------
 class Instrument(Base):
     __tablename__ = 'instrument'
 
@@ -50,8 +52,11 @@ class Instrument(Base):
             'category_id': self.category_id,
         }
 
+
 # create the database
-engine = create_engine('sqlite:///orchestra.db',connect_args={'check_same_thread': False})
+engine = create_engine(
+    'sqlite:///orchestra.db',
+    connect_args={'check_same_thread': False})
 
 
 Base.metadata.create_all(engine)
