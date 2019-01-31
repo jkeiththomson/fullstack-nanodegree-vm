@@ -39,7 +39,6 @@ class Instrument(Base):
     picture_url = Column(String(250))
     picture_attr = Column(String(250))
     category_id = Column(Integer, ForeignKey('category.id'))
-    # category = relationship(Category)
 
     @property
     def serialize(self):
@@ -68,31 +67,28 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 # get the category data from JSON file
-with open('categories.json') as cat_file:
+with open('database_categories.json') as cat_file:
     cat_data = json.load(cat_file)
     cats = cat_data["Categories"]
     for c in cats:
-        category = Category(name = c["name"],
-                            description = c["description"])
+        category = Category(name=c["name"],
+                            description=c["description"])
         session.add(category)
         session.commit()
 
 # get the instrument data from JSON file
-with open('instruments.json') as inst_file:
+with open('database_instruments.json') as inst_file:
     inst_data = json.load(inst_file)
     insts = inst_data["Instruments"]
     for i in insts:
         # find categpry id for this instrument
-        instrument = Instrument(name = i["name"],
-                                description = i["description"],
-                                category_id = i["category_id"],
-                                picture_url = i["picture_url"],
-                                picture_attr = i["picture_attr"])
+        instrument = Instrument(name=i["name"],
+                                description=i["description"],
+                                category_id=i["category_id"],
+                                picture_url=i["picture_url"],
+                                picture_attr=i["picture_attr"])
         session.add(instrument)
         session.commit()
 
 # finish up
 print "orchestra.db has been set up!"
-
-
-
