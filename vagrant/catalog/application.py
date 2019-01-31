@@ -189,7 +189,7 @@ def showInstrument(category_id, instrument_id):
 
 # NEW INSTRUMENT SCREEN
 @app.route('/category/<int:category_id>/instrument/new',
-           0methods=['GET', 'POST'])
+           methods=['GET', 'POST'])
 def newInstrument(category_id):
     if 'username' not in login_session:
         return redirect(url_for('showLogin'))
@@ -233,8 +233,8 @@ def editInstrument(category_id, instrument_id):
         if request.form['picture_attr']:
             editedInstrument.picture_attr = request.form['picture_attr']
         if request.form['category']:
-            editedInstrument.category_id =
-            getCategoryId(request.form['category'])
+            editedInstrument.category_id = getCategoryId(
+                request.form['category'])
         session.add(editedInstrument)
         session.commit()
         return redirect(
