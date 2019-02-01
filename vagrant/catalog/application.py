@@ -110,7 +110,7 @@ def gconnect():
 
     # grab the desired user info from the returned data oebject
     if 'name' in data:
-       login_session['username'] = data['name']
+        login_session['username'] = data['name']
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
 
@@ -248,7 +248,7 @@ def editInstrument(category_id, instrument_id):
     # if no user is logged in, no editing is allowed
     if 'email' not in login_session:
         return redirect(url_for('showLogin'))
-    #make sure edited item exists
+    # make sure edited item exists
     editedItem = session.query(
         Instrument).filter_by(id=instrument_id).one_or_none()
     if not editedItem:
@@ -385,7 +385,7 @@ def getUserID(email):
     try:
         user = session.query(User).filter_by(email=email).one()
         return user.id
-    except:
+    except NoResultFound:
         return None
 
 
