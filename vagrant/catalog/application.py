@@ -194,6 +194,7 @@ def newInstrument(category_id):
     if 'username' not in login_session:
         return redirect(url_for('showLogin'))
     categories = session.query(Category).all()
+    uname = getUsername()
     message = ""
     if request.method == 'POST':
         # create an Instrument object from posted data
@@ -204,7 +205,8 @@ def newInstrument(category_id):
         or not newItem.category_id:
             message = "All fields are required"
             return render_template(
-            'newinstrument.html', item=newItem, categories=categories,
+            'newinstrument.html', username=uname,
+            item=newItem, categories=categories,
             message=message), 400
         session.add(newItem)
         session.commit()
@@ -218,7 +220,8 @@ def newInstrument(category_id):
             picture_attr="",
             category_id=category_id)
         return render_template(
-            'newinstrument.html', item=newItem, categories=categories,
+            'newinstrument.html', username=uname,
+            item=newItem, categories=categories,
             message=message)
 
 
@@ -232,6 +235,7 @@ def editInstrument(category_id, instrument_id):
     categories = session.query(Category).all()
     editedItem = session.query(
         Instrument).filter_by(id=instrument_id).one()
+    uname = getUsername()
     message = ""
     if request.method == 'POST':
         # create an Instrument object from posted data
@@ -248,7 +252,8 @@ def editInstrument(category_id, instrument_id):
         or not editedItem.category_id:
             message = "All fields are required"
             return render_template(
-                'editinstrument.html', category_id=category_id, item=editedItem,
+                'editinstrument.html', username=uname,
+                category_id=category_id, item=editedItem,
                 categories=categories, message=message), 400
         session.add(editedItem)
         session.commit()
@@ -258,7 +263,7 @@ def editInstrument(category_id, instrument_id):
                     instrument_id=instrument_id))
     else:
         return render_template(
-            'editinstrument.html', category_id=category_id, item=editedItem,
+            'editinstrument.html', username=uname, category_id=category_id, item=editedItem,
             categories=categories, message=message), 400
 
 
