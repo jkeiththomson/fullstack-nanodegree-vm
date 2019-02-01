@@ -157,6 +157,11 @@ input[type=radio] {
   visibility: hidden;
 }
 
+.post-error {
+  font-weight: 700;
+  color: red;
+}
+
 /* the following css shows the picture caption when you mouse over an iamge
  * it was modfied from this stackoverflow post:
  * https://stackoverflow.com/questions/35408661/animated-figcaption-overlay-deriving-width-from-image

@@ -5,7 +5,7 @@
 
 {% block back %}
 <div class="back-arrow">
-    <a href="{{url_for('showCategory', category_id=category_id)}}"> < Back</a>
+    <a href="{{url_for('showCategory', category_id=item.category_id)}}"> < Back</a>
 </div>
 {% endblock %}
 
@@ -14,20 +14,24 @@
     <h2>Add New Instrument</h2>
 </nav>
 
-<form action="{{ url_for('newInstrument', category_id=category_id)}}" method='post'>
+<form action="{{ url_for('newInstrument', category_id=item.category_id)}}" method='post'>
 
 	<h3> Fill in the details for this instrument </h3>
 
-	<p> <label>Name:</label>
-		<input type ='text' name='name'> </p>
+	{% if message %}
+	<p class="post-error"> {{message}} </p>
+	{% endif %}
+
+	<p>	<label>Name:</label>
+		<input type ='text' name='name' value='{{item.name }}'>	</p>
 
 	<p> <label>Description:</label>
-		<textarea name='description' rows='5'></textarea> </p>
+		<textarea name='description' rows='5'>{{item.description}}</textarea> </p>
 
 	<p> <label>Category:</label>
 		{% if categories %}
 			{% for c in categories %}
-				{% if category_id == c.id %}
+				{% if item.category_id == c.id %}
 					<input type='radio' name='category' value='{{c.name}}' checked >{{c.name}}
 				{%else%}
 					<input type='radio' name='category' value='{{c.name}}'>{{c.name}}
@@ -37,14 +41,14 @@
 	</p>
 
 	<p> <label>Picture URL:</label>
-		<input type ='text' name='picture_url''> </p>
+		<input type ='text' name='picture_url' value='{{item.picture_url }}'> </p>
 
-	<p>	<label>Picture Attribution:</label>
-		<textarea name='picture_attr'></textarea> </p>
+	<p> <label>Picture Attribution:</label>
+		<textarea name='picture_attr'>{{item.picture_attr }}</textarea>	</p>
 
 	<p>	<input type='submit', value='Add Instrument'>
 		<input type='button', value='Cancel',
-			onclick="window,location.href='{{url_for('showCategory', category_id=category_id)}}' ">	</p>
+			onclick="window,location.href='{{url_for('showCategory', category_id=item.category_id)}}' ">	</p>
 </form>
 
 {% endblock %}

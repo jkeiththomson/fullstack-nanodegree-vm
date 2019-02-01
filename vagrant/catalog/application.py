@@ -194,22 +194,32 @@ def newInstrument(category_id):
     if 'username' not in login_session:
         return redirect(url_for('showLogin'))
     categories = session.query(Category).all()
-    uname = getUsername()
+    message = ""
     if request.method == 'POST':
-        cat_id = getCategoryId(request.form['category'])
-        newItem = Instrument(
-            name=request.form['name'],
-            description=request.form['description'],
-            picture_url=request.form['picture_url'],
-            picture_attr=request.form['picture_attr'],
-            category_id=cat_id)
+        # create an Instrument object from posted data
+        newItem = createInstrument(request)
+        # if any field is blank, reject the post
+        if not newItem.name or not newItem.description \
+        or not newItem.picture_url or not newItem.picture_attr \
+        or not newItem.category_id:
+            message = "All fields are required"
+            return render_template(
+            'newinstrument.html', item=newItem, categories=categories,
+            message=message), 400
         session.add(newItem)
         session.commit()
-        return redirect(url_for('showCategory', category_id=cat_id))
+        return redirect(url_for('showCategory',
+            category_id=newItem.category_id))
     else:
+        newItem = Instrument(
+            name="",
+            description="",
+            picture_url="",
+            picture_attr="",
+            category_id=category_id)
         return render_template(
-            'newinstrument.html', username=uname,
-            category_id=category_id, categories=categories)
+            'newinstrument.html', item=newItem, categories=categories,
+            message=message)
 
 
 # EDIT INSTRUMENT SCREEN
@@ -220,31 +230,36 @@ def editInstrument(category_id, instrument_id):
     if 'username' not in login_session:
         return redirect(url_for('showLogin'))
     categories = session.query(Category).all()
-    editedInstrument = session.query(
+    editedItem = session.query(
         Instrument).filter_by(id=instrument_id).one()
-    uname = getUsername()
+    message = ""
     if request.method == 'POST':
-        if request.form['name']:
-            editedInstrument.name = request.form['name']
-        if request.form['description']:
-            editedInstrument.description = request.form['description']
-        if request.form['picture_url']:
-            editedInstrument.picture_url = request.form['picture_url']
-        if request.form['picture_attr']:
-            editedInstrument.picture_attr = request.form['picture_attr']
-        if request.form['category']:
-            editedInstrument.category_id = getCategoryId(
-                request.form['category'])
-        session.add(editedInstrument)
+        # create an Instrument object from posted data
+        formItem = createInstrument(request)
+        # replace edited item's parmeters with form's values
+        editedItem.name = formItem.name;
+        editedItem.description = formItem.description;
+        editedItem.category_id = formItem.category_id;
+        editedItem.picture_url = formItem.picture_url;
+        editedItem.picture_attr = formItem.picture_attr
+        # if any field is blank, reject the post
+        if not editedItem.name or not editedItem.description \
+        or not editedItem.picture_url or not editedItem.picture_attr \
+        or not editedItem.category_id:
+            message = "All fields are required"
+            return render_template(
+                'editinstrument.html', category_id=category_id, item=editedItem,
+                categories=categories, message=message), 400
+        session.add(editedItem)
         session.commit()
         return redirect(
             url_for('showInstrument',
-                    category_id=editedInstrument.category_id,
-                    instrument_id=editedInstrument.id))
+                    category_id=editedItem.category_id,
+                    instrument_id=instrument_id))
     else:
         return render_template(
-            'editinstrument.html', username=uname,
-            categories=categories, item=editedInstrument)
+            'editinstrument.html', category_id=category_id, item=editedItem,
+            categories=categories, message=message), 400
 
 
 # DELETE INSTRUMENT SCREEN
@@ -266,6 +281,33 @@ def deleteInstrument(category_id, instrument_id):
 
 
 # HELPER FUNCTIONS
+# create a new instrument from POST request
+def createInstrument(request):
+    # strip away leading and trailing spaces
+    form_name = ""
+    form_description = ""
+    form_picture_url = ""
+    form_picture_attr = ""
+    form_category = ""
+    if request.form['name']:
+        form_name = request.form['name'].strip()
+    if request.form['description']:
+        form_description = request.form['description'].strip()
+    if request.form['picture_url']:
+        form_picture_url = request.form['picture_url'].strip()
+    if request.form['picture_attr']:
+        form_picture_attr = request.form['picture_attr'].strip()
+    if request.form['category']:
+        form_category_id = getCategoryId(request.form['category'])
+    # create a new Instrument from entered data
+    inst = Instrument(
+        name=form_name,
+        description=form_description,
+        picture_url=form_picture_url,
+        picture_attr=form_picture_attr,
+        category_id=form_category_id)
+    return inst
+
 # given a category name, return its ID
 def getCategoryId(catName):
     categories = session.query(Category).all()
