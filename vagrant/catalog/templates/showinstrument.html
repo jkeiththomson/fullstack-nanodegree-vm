@@ -24,7 +24,7 @@
 
     <p>{{instrument.description}}</p>
 
-    {% if username %}
+    {% if user_is_owner %}
     <p>
         <a href="{{url_for( 'editInstrument', category_id=category.id, instrument_id=instrument.id)}}">Edit</a> |
         <a href="{{url_for( 'deleteInstrument', category_id=category.id, instrument_id=instrument.id)}}">Delete</a>

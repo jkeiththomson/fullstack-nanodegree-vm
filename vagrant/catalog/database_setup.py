@@ -39,6 +39,7 @@ class Instrument(Base):
     picture_url = Column(String(250))
     picture_attr = Column(String(250))
     category_id = Column(Integer, ForeignKey('category.id'))
+    user_id = Column(Integer, ForeignKey('user.id'))
 
     @property
     def serialize(self):
@@ -50,6 +51,27 @@ class Instrument(Base):
             'picture_url': self.picture_url,
             'picture_attr': self.picture_attr,
             'category_id': self.category_id,
+            'user_id': self.user_id,
+        }
+
+
+# ---------------------- User ---------------------------
+class User(Base):
+    __tablename__ = 'user'
+
+    name = Column(String(250), nullable=False)
+    id = Column(Integer, primary_key=True)
+    email = Column(String(250))
+    picture = Column(String(250))
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'name': self.name,
+            'id': self.id,
+            'email': self.email,
+            'picture': self.picture,
         }
 
 
@@ -66,6 +88,13 @@ Base.metadata.create_all(engine)
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+# create "user 1", the "creator" of the built-in instruments
+user1 = User(name="System Administrator",
+             email="admin@orchestra_catalog.com",
+             picture="")
+session.add(user1)
+session.commit
+
 # get the category data from JSON file
 with open('database_categories.json') as cat_file:
     cat_data = json.load(cat_file)
@@ -81,12 +110,13 @@ with open('database_instruments.json') as inst_file:
     inst_data = json.load(inst_file)
     insts = inst_data["Instruments"]
     for i in insts:
-        # find categpry id for this instrument
+        # create a new instrument object from JSON data
         instrument = Instrument(name=i["name"],
                                 description=i["description"],
                                 category_id=i["category_id"],
                                 picture_url=i["picture_url"],
-                                picture_attr=i["picture_attr"])
+                                picture_attr=i["picture_attr"],
+                                user_id=user1.id)
         session.add(instrument)
         session.commit()
 

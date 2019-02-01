@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Category, Instrument
+from database_setup import Base, Category, Instrument, User
 from flask import session as login_session
 import random
 import string
@@ -110,15 +110,19 @@ def gconnect():
 
     # grab the desired user info from the returned data oebject
     if 'name' in data:
-        login_session['username'] = data['name']
-    else:
-        login_session['username'] = data['email']
+       login_session['username'] = data['name']
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
 
+    # see if user exists in DB, create new user if not
+    user_id = getUserID(login_session["email"])
+    if not user_id:
+        user_id = createUser(login_session)
+    login_session['user_id'] = user_id
+
     output = ''
     output += 'Login successful: '
-    output += login_session['username']
+    output += login_session['email']
     output += ' is now logged in!'
     return output
 
@@ -140,7 +144,8 @@ def gdisconnect():
         del login_session['gplus_id']
         del login_session['email']
         del login_session['picture']
-        del login_session['username']
+        if 'username' in login_session:
+            del login_session['username']
 
         response = make_response(
             json.dumps('Successfully disconnected.'), 200)
@@ -160,9 +165,9 @@ def gdisconnect():
 @app.route('/orchestra/')
 def showOrchestra():
     categories = session.query(Category).all()
-    uname = getUsername()
+    umail = getUserEmail()
     return render_template(
-        'showorchestra.html', username=uname, categories=categories)
+        'showorchestra.html', user_email=umail, categories=categories)
 
 # CATEGORY SCREEN - Orchestra page with a category selected
 @app.route('/category/<int:category_id>/')
@@ -170,10 +175,11 @@ def showCategory(category_id):
     categories = session.query(Category).all()
     category = session.query(Category).filter_by(id=category_id).one()
     instruments = session.query(Instrument).filter_by(category_id=category_id)
-    uname = getUsername()
+    umail = getUserEmail()
     return render_template(
-        'showcategory.html', username=uname, categories=categories,
-        category=category, instruments=instruments, category_id=category_id)
+        'showcategory.html', user_email=umail,
+        categories=categories, category=category, instruments=instruments,
+        category_id=category_id)
 
 # INSTRUMENT DETAILS SCREEN
 @app.route('/category/<int:category_id>/instrument/<int:instrument_id>/')
@@ -182,30 +188,35 @@ def showInstrument(category_id, instrument_id):
         Instrument).filter_by(id=instrument_id).one()
     category = session.query(
         Category).filter_by(id=instrument.category_id).one()
-    uname = getUsername()
+    umail = getUserEmail()
+    creator = getUserInfo(instrument.user_id)
+    if 'email' not in login_session or creator.id != login_session['user_id']:
+        is_owner = False
+    else:
+        is_owner = True
     return render_template(
-        'showinstrument.html', username=uname,
+        'showinstrument.html', user_email=umail, user_is_owner=is_owner,
         instrument=instrument, category=category)
 
 # NEW INSTRUMENT SCREEN
 @app.route('/category/<int:category_id>/instrument/new',
            methods=['GET', 'POST'])
 def newInstrument(category_id):
-    if 'username' not in login_session:
+    if 'email' not in login_session:
         return redirect(url_for('showLogin'))
     categories = session.query(Category).all()
-    uname = getUsername()
+    umail = getUserEmail()
     message = ""
     if request.method == 'POST':
         # create an Instrument object from posted data
-        newItem = createInstrument(request)
+        newItem = createInstrument(request, login_session['user_id'])
         # if any field is blank, reject the post
         if (not newItem.name or not newItem.description
                 or not newItem.picture_url or not newItem.picture_attr
                 or not newItem.category_id):
             message = "All fields are required"
             return render_template(
-                'newinstrument.html', username=uname,
+                'newinstrument.html', user_email=umail,
                 item=newItem, categories=categories,
                 message=message), 400
         session.add(newItem)
@@ -220,7 +231,7 @@ def newInstrument(category_id):
             picture_attr="",
             category_id=category_id)
         return render_template(
-            'newinstrument.html', username=uname,
+            'newinstrument.html', user_email=umail,
             item=newItem, categories=categories,
             message=message)
 
@@ -230,16 +241,16 @@ def newInstrument(category_id):
     '/category/<int:category_id>/instrument/<int:instrument_id>/edit',
     methods=['GET', 'POST'])
 def editInstrument(category_id, instrument_id):
-    if 'username' not in login_session:
+    if 'email' not in login_session:
         return redirect(url_for('showLogin'))
     categories = session.query(Category).all()
     editedItem = session.query(
         Instrument).filter_by(id=instrument_id).one()
-    uname = getUsername()
+    umail = getUserEmail()
     message = ""
     if request.method == 'POST':
         # create an Instrument object from posted data
-        formItem = createInstrument(request)
+        formItem = createInstrument(request, login_session['user_id'])
         # replace edited item's parmeters with form's values
         editedItem.name = formItem.name
         editedItem.description = formItem.description
@@ -252,7 +263,7 @@ def editInstrument(category_id, instrument_id):
                 or not editedItem.category_id):
             message = "All fields are required"
             return render_template(
-                'editinstrument.html', username=uname,
+                'editinstrument.html', user_email=umail,
                 category_id=category_id, item=editedItem,
                 categories=categories, message=message), 400
         session.add(editedItem)
@@ -263,7 +274,7 @@ def editInstrument(category_id, instrument_id):
                     instrument_id=instrument_id))
     else:
         return render_template(
-            'editinstrument.html', username=uname, category_id=category_id,
+            'editinstrument.html', user_email=umail, category_id=category_id,
             item=editedItem, categories=categories, message=message), 400
 
 
@@ -271,23 +282,23 @@ def editInstrument(category_id, instrument_id):
 @app.route('/category/<int:category_id>/instrument/<int:instrument_id>/delete',
            methods=['GET', 'POST'])
 def deleteInstrument(category_id, instrument_id):
-    if 'username' not in login_session:
+    if 'email' not in login_session:
         return redirect(url_for('showLogin'))
     itemToDelete = session.query(
         Instrument).filter_by(id=instrument_id).one()
-    uname = getUsername()
+    umail = getUserEmail()
     if request.method == 'POST':
         session.delete(itemToDelete)
         session.commit()
         return redirect(url_for('showCategory', category_id=category_id))
     else:
         return render_template(
-            'deleteInstrument.html', username=uname, item=itemToDelete)
+            'deleteInstrument.html', user_email=umail, item=itemToDelete)
 
 
 # HELPER FUNCTIONS
 # create a new instrument from POST request
-def createInstrument(request):
+def createInstrument(request, creator_id):
     # strip away leading and trailing spaces
     form_name = ""
     form_description = ""
@@ -310,8 +321,23 @@ def createInstrument(request):
         description=form_description,
         picture_url=form_picture_url,
         picture_attr=form_picture_attr,
-        category_id=form_category_id)
+        category_id=form_category_id,
+        user_id=creator_id)
     return inst
+
+
+# create a new user in the database
+def createUser(login_session):
+    uname = ""
+    if 'username' in login_session:
+        uname = login_session['username']
+    newUser = User(name=uname,
+                   email=login_session['email'],
+                   picture=login_session['picture'])
+    session.add(newUser)
+    session.commit()
+    user = session.query(User).filter_by(email=login_session['email']).one()
+    return user.id
 
 
 # given a category name, return its ID
@@ -323,12 +349,26 @@ def getCategoryId(catName):
     return None
 
 
-# get logged in user's name
-def getUsername():
-    if 'username' in login_session:
-        return login_session['username']
-    return None
+# given a user_id, return the corresponding User object
+def getUserInfo(user_id):
+    user = session.query(User).filter_by(id=user_id).one()
+    return user
 
+
+# given an email address, return the corresonding user_id
+def getUserID(email):
+    try:
+        user = session.query(User).filter_by(email=email).one()
+        return user.id
+    except:
+        return None
+
+
+# get logged in user's email address
+def getUserEmail():
+    if 'email' in login_session:
+        return login_session['email']
+    return None
 
 # ------------- HANDLE API REQUESTS -----------------
 

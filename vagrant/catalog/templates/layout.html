@@ -26,9 +26,9 @@
 
 			<!-- "login" button is handled here for all screens -->
 			<div class="login">
-				{% if username %}
+				{% if user_email %}
 				<div>
-					<span>You are logged in as {{username}}</span>
+					<span>You are logged in as {{user_email}}</span>
 					<span><a href="{{ url_for('gdisconnect')}}">Log out</a></span>
 				</div>
 				{% else %}
