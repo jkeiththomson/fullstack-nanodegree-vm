@@ -200,18 +200,18 @@ def newInstrument(category_id):
         # create an Instrument object from posted data
         newItem = createInstrument(request)
         # if any field is blank, reject the post
-        if not newItem.name or not newItem.description \
-        or not newItem.picture_url or not newItem.picture_attr \
-        or not newItem.category_id:
+        if (not newItem.name or not newItem.description
+                or not newItem.picture_url or not newItem.picture_attr
+                or not newItem.category_id):
             message = "All fields are required"
             return render_template(
-            'newinstrument.html', username=uname,
-            item=newItem, categories=categories,
-            message=message), 400
+                'newinstrument.html', username=uname,
+                item=newItem, categories=categories,
+                message=message), 400
         session.add(newItem)
         session.commit()
-        return redirect(url_for('showCategory',
-            category_id=newItem.category_id))
+        return redirect(url_for(
+            'showCategory', category_id=newItem.category_id))
     else:
         newItem = Instrument(
             name="",
@@ -241,15 +241,15 @@ def editInstrument(category_id, instrument_id):
         # create an Instrument object from posted data
         formItem = createInstrument(request)
         # replace edited item's parmeters with form's values
-        editedItem.name = formItem.name;
-        editedItem.description = formItem.description;
-        editedItem.category_id = formItem.category_id;
-        editedItem.picture_url = formItem.picture_url;
+        editedItem.name = formItem.name
+        editedItem.description = formItem.description
+        editedItem.category_id = formItem.category_id
+        editedItem.picture_url = formItem.picture_url
         editedItem.picture_attr = formItem.picture_attr
         # if any field is blank, reject the post
-        if not editedItem.name or not editedItem.description \
-        or not editedItem.picture_url or not editedItem.picture_attr \
-        or not editedItem.category_id:
+        if (not editedItem.name or not editedItem.description
+                or not editedItem.picture_url or not editedItem.picture_attr
+                or not editedItem.category_id):
             message = "All fields are required"
             return render_template(
                 'editinstrument.html', username=uname,
@@ -263,8 +263,8 @@ def editInstrument(category_id, instrument_id):
                     instrument_id=instrument_id))
     else:
         return render_template(
-            'editinstrument.html', username=uname, category_id=category_id, item=editedItem,
-            categories=categories, message=message), 400
+            'editinstrument.html', username=uname, category_id=category_id,
+            item=editedItem, categories=categories, message=message), 400
 
 
 # DELETE INSTRUMENT SCREEN
@@ -312,6 +312,7 @@ def createInstrument(request):
         picture_attr=form_picture_attr,
         category_id=form_category_id)
     return inst
+
 
 # given a category name, return its ID
 def getCategoryId(catName):
