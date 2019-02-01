@@ -173,7 +173,9 @@ def showOrchestra():
 @app.route('/category/<int:category_id>/')
 def showCategory(category_id):
     categories = session.query(Category).all()
-    category = session.query(Category).filter_by(id=category_id).one()
+    category = session.query(Category).filter_by(id=category_id).one_or_none()
+    if not category:
+        return "404 error: category not found", 404
     instruments = session.query(Instrument).filter_by(category_id=category_id)
     umail = getUserEmail()
     return render_template(
@@ -185,7 +187,9 @@ def showCategory(category_id):
 @app.route('/category/<int:category_id>/instrument/<int:instrument_id>/')
 def showInstrument(category_id, instrument_id):
     instrument = session.query(
-        Instrument).filter_by(id=instrument_id).one()
+        Instrument).filter_by(id=instrument_id).one_or_none()
+    if not instrument:
+        return("404 error: instrument not found", 404)
     category = session.query(
         Category).filter_by(id=instrument.category_id).one()
     umail = getUserEmail()
@@ -241,11 +245,23 @@ def newInstrument(category_id):
     '/category/<int:category_id>/instrument/<int:instrument_id>/edit',
     methods=['GET', 'POST'])
 def editInstrument(category_id, instrument_id):
+    # if no user is logged in, no editing is allowed
     if 'email' not in login_session:
         return redirect(url_for('showLogin'))
-    categories = session.query(Category).all()
+    #make sure edited item exists
     editedItem = session.query(
-        Instrument).filter_by(id=instrument_id).one()
+        Instrument).filter_by(id=instrument_id).one_or_none()
+    if not editedItem:
+        return("404 error: instrument not found", 404)
+    # in order to edit an instrument, logged-in user
+    # must be the one who created it
+    if editedItem.user_id != getUserID(login_session['user_id']):
+        return redirect(
+            url_for('showInstrument',
+                    category_id=category_id,
+                    instrument_id=instrument_id))
+    # gather up some info
+    categories = session.query(Category).all()
     umail = getUserEmail()
     message = ""
     if request.method == 'POST':
@@ -285,8 +301,17 @@ def deleteInstrument(category_id, instrument_id):
     if 'email' not in login_session:
         return redirect(url_for('showLogin'))
     itemToDelete = session.query(
-        Instrument).filter_by(id=instrument_id).one()
+        Instrument).filter_by(id=instrument_id).one_or_none()
+    if not itemToDelete:
+        return("404 error: instrument not found", 404)
     umail = getUserEmail()
+    # in order to delete an instrument, logged-in user
+    # must be the one who created it
+    if itemToDelete.user_id != getUserID(login_session['user_id']):
+        return redirect(
+            url_for('showInstrument',
+                    category_id=category_id,
+                    instrument_id=instrument_id))
     if request.method == 'POST':
         session.delete(itemToDelete)
         session.commit()
