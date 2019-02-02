@@ -40,9 +40,9 @@ The app is marginally responsive at smaller screen sizes.
 
 This is version 1.1 of the Item Catalog project. I made the following changes based on my reviewer's feedback in order to satisfy the project rubrick:
 
-- Code is now PEP8 compliant, as repoprted by a pycodestyle review
+- Code is now PEP8 compliant, as reported by a pycodestyle review
 
-- Users can no longer leave fieldsblank when creating or editing items
+- Users can no longer leave field sblank when creating or editing items
 
 - Users are now limited to editing and deleting only those items that they created
 
