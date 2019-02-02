@@ -6,16 +6,18 @@ import string
 import httplib2
 import requests
 import json
-from flask import (Flask,
-                  render_template,
-                  request,
-                  redirect,
-                  url_for,
-                  jsonify,
-                  make_response)
+from flask import (
+    Flask,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    jsonify,
+    make_response)
 from flask import session as login_session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm.exc import NoResultFound
 from database_setup import Base, Category, Instrument, User
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
@@ -263,7 +265,7 @@ def editInstrument(category_id, instrument_id):
         return("404 error: instrument not found", 404)
     # in order to edit an instrument, logged-in user
     # must be the one who created it
-    if editedItem.user_id != getUserID(login_session['user_id']):
+    if editedItem.user_id != login_session['user_id']:
         return redirect(
             url_for('showInstrument',
                     category_id=category_id,
@@ -315,7 +317,7 @@ def deleteInstrument(category_id, instrument_id):
     umail = getUserEmail()
     # in order to delete an instrument, logged-in user
     # must be the one who created it
-    if itemToDelete.user_id != getUserID(login_session['user_id']):
+    if itemToDelete.user_id != login_session['user_id']:
         return redirect(
             url_for('showInstrument',
                     category_id=category_id,
@@ -414,7 +416,10 @@ def categoriesJSON():
 # API - Return a single category
 @app.route('/category/<int:category_id>/JSON')
 def categoryJSON(category_id):
-    category = session.query(Category).filter_by(id=category_id).one()
+    category = session.query(Category).filter_by(
+        id=category_id).one_or_none()
+    if not category:
+        return "404 error: category not found", 404
     return jsonify(Category=category.serialize)
 
 # API - Return all instruments
@@ -426,8 +431,25 @@ def instrumentsJSON():
 # API - Return a single instrument
 @app.route('/instrument/<int:instrument_id>/JSON')
 def instrumentJSON(instrument_id):
-    instrument = session.query(Instrument).filter_by(id=instrument_id).one()
+    instrument = session.query(Instrument).filter_by(
+        id=instrument_id).one_or_none()
+    if not instrument:
+        return "404 error: instrument not found", 404
     return jsonify(Instrument=instrument.serialize)
+
+# API - Return all users
+@app.route('/users/JSON')
+def usersJSON():
+    users = session.query(User).all()
+    return jsonify(Users=[u.serialize for u in users])
+
+# API - Return a single user
+@app.route('/user/<int:user_id>/JSON')
+def userJSON(user_id):
+    user = session.query(User).filter_by(id=user_id).one_or_none()
+    if not user:
+        return "404 error: user not found", 404
+    return jsonify(User=user_id.serialize)
 
 
 if __name__ == '__main__':
