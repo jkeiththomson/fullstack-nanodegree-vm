@@ -3,8 +3,8 @@
 ## Table of Contents
 
 - [Instructions](#instructions)
-- [Description](#descriptions)
-- [Change Log](#changelog)
+- [Description](#description)
+- [Change Log](#change-log)
 - [Attributions](#attributions)
 - [Contributing](#contributing)
 

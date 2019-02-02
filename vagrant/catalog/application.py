@@ -1,16 +1,24 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+# application.py
+# main application for "Item Catalog" Project
+# written by J K Thomson, 24 January 2019
+import random
+import string
+import httplib2
+import requests
+import json
+from flask import (Flask,
+                  render_template,
+                  request,
+                  redirect,
+                  url_for,
+                  jsonify,
+                  make_response)
+from flask import session as login_session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Category, Instrument, User
-from flask import session as login_session
-import random
-import string
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
-import httplib2
-import json
-from flask import make_response
-import requests
 
 app = Flask(__name__)
 

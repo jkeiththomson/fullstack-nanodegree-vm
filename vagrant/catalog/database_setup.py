@@ -1,4 +1,6 @@
-# set up the initial database
+# database_setup.py
+# database initialization for "Item Catalog" Project
+# written by J K Thomson, 24 January 2019
 import os
 import sys
 import json

@@ -1,6 +1,8 @@
 @charset "utf-8";
-/* CSS Document */
-
+/* style.css
+ * CSS styling for "Item Catalog" project
+ * written by J K Thomson, 28 January 2019
+ */
 body,th,p{
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 18px;
